@@ -17,9 +17,16 @@ public class Planet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id_planet;
+    private Integer id_planet;
 
     private String nome;
     private String clima;
     private String terreno;
+    private Integer aparicoes;
+
+    public Planet(String nome, String clima, String terreno){
+        this.nome = nome;
+        this.clima = clima;
+        this.terreno = terreno;
+    }
 }
