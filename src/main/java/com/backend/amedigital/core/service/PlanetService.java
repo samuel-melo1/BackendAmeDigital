@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
 public class PlanetService {
 
@@ -19,8 +20,8 @@ public class PlanetService {
 
     @Transactional
     public Planet save(Planet planet) throws Exception {
-        Planet planetResponse = planetRepository.getPlanetById_planet(planet.getId_planet());
-        if (planetResponse != null) {
+        Optional<Planet> planetResponse = planetRepository.findById(planet.getId_planet());
+        if (planetResponse.isPresent()) {
             throw new Exception("Planet is exist");
         }
         Planet newPlanet = new Planet(planet.getNome(), planet.getClima(), planet.getTerreno());
@@ -35,14 +36,16 @@ public class PlanetService {
         return planetRepository.getPlanetByNome(nome);
     }
 
-    public Planet listByID(Integer id_planet) {
-        return planetRepository.getPlanetById_planet(id_planet);
+    public Optional<Planet> listByID(Integer id_planet) {
+
+       Optional<Planet> planet =  planetRepository.findById(id_planet);
+        return planet;
     }
 
     @Transactional
     public boolean removeById(Integer id_planet) {
-        Planet planetResponse = planetRepository.getPlanetById_planet(id_planet);
-        if(planetResponse != null){
+        Optional<Planet> planetResponse = planetRepository.findById(id_planet);
+        if(planetResponse.isEmpty()){
             planetRepository.deleteById(id_planet);
             return true;
         }
