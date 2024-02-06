@@ -9,8 +9,6 @@ import java.util.Optional;
 @Repository
 public interface PlanetRepository extends JpaRepository<Planet, Integer> {
 
-    Planet getPlanetById_planet(Integer id);
-
-    Planet getPlanetByNome(String nome);
+    Planet findPlanetByNome(String nome);
 
 }

@@ -33,7 +33,7 @@ public class PlanetService {
     }
 
     public Planet listByNome(String nome) {
-        return planetRepository.getPlanetByNome(nome);
+        return planetRepository.findPlanetByNome(nome);
     }
 
     public Optional<Planet> listByID(Integer id_planet) {
