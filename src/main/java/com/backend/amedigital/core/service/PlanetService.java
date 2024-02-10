@@ -13,9 +13,11 @@ import java.util.Optional;
 public class PlanetService {
 
     private PlanetRepository planetRepository;
+    private ServiceAparicoes serviceAparicoes;
 
-    public PlanetService(PlanetRepository planetRepository) {
+    public PlanetService(PlanetRepository planetRepository, ServiceAparicoes serviceAparicoes) {
         this.planetRepository = planetRepository;
+        this.serviceAparicoes = serviceAparicoes;
     }
 
     @Transactional
@@ -24,7 +26,8 @@ public class PlanetService {
         if (planetResponse.isPresent()) {
             throw new Exception("Planet is exist");
         }
-        Planet newPlanet = new Planet(planet.getNome(), planet.getClima(), planet.getTerreno());
+       Integer aparicoes =  serviceAparicoes.buscarAparicoes(planet.getNome());
+        Planet newPlanet = new Planet(planet.getNome(), planet.getClima(), planet.getTerreno(), aparicoes);
         return planetRepository.save(newPlanet);
     }
 
