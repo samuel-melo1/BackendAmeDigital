@@ -16,6 +16,7 @@ import java.util.List;
 public class PlanetController {
 
     private PlanetService planetService;
+
     public PlanetController(PlanetService planetService) {
         this.planetService = planetService;
     }
@@ -29,17 +30,17 @@ public class PlanetController {
     }
 
     @GetMapping("/listPlanets")
-    public ResponseEntity<List<Planet>> listAllPlanets(){
+    public ResponseEntity<List<Planet>> listAllPlanets() {
         return new ResponseEntity(planetService.list(), HttpStatus.OK);
     }
 
     @GetMapping("/listByNome/{nome}")
-    public ResponseEntity<String> listPlanetByNome(@Valid @PathVariable String nome){
+    public ResponseEntity<String> listPlanetByNome(@Valid @PathVariable String nome) {
         return new ResponseEntity(planetService.listByNome(nome), HttpStatus.OK);
     }
 
     @GetMapping("/listByID/{id_planet}")
-    public ResponseEntity<Planet> listPlanetByID(@Valid @PathVariable Integer id_planet){
+    public ResponseEntity<Planet> listPlanetByID(@Valid @PathVariable Integer id_planet) {
         return new ResponseEntity(planetService.listByID(id_planet), HttpStatus.OK);
     }
 

@@ -26,7 +26,7 @@ public class PlanetService {
         if (planetResponse.isPresent()) {
             throw new Exception("Planet is exist");
         }
-       Integer aparicoes =  serviceAparicoes.buscarAparicoes(planet.getNome());
+        Integer aparicoes = serviceAparicoes.buscarAparicoes(planet.getNome());
         Planet newPlanet = new Planet(planet.getNome(), planet.getClima(), planet.getTerreno(), aparicoes);
         return planetRepository.save(newPlanet);
     }
@@ -41,14 +41,14 @@ public class PlanetService {
 
     public Optional<Planet> listByID(Integer id_planet) {
 
-       Optional<Planet> planet =  planetRepository.findById(id_planet);
+        Optional<Planet> planet = planetRepository.findById(id_planet);
         return planet;
     }
 
     @Transactional
     public boolean removeById(Integer id_planet) {
         Optional<Planet> planetResponse = planetRepository.findById(id_planet);
-        if(planetResponse.isEmpty()){
+        if (planetResponse.isEmpty()) {
             planetRepository.deleteById(id_planet);
             return true;
         }
