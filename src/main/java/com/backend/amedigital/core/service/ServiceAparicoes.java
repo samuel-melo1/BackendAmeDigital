@@ -2,6 +2,8 @@ package com.backend.amedigital.core.service;
 
 import com.backend.amedigital.core.model.Planet;
 import com.backend.amedigital.dto.PlanetDTO;
+import com.backend.amedigital.exceptions.NotFoundResultAPI;
+import com.backend.amedigital.exceptions.PlanetNotFoundException;
 import com.backend.amedigital.infra.repository.PlanetRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -23,34 +25,28 @@ public class ServiceAparicoes {
     }
 
     public Integer buscarAparicoes(String planet) {
+        String baseUrl = url + planet;
         try {
-            String baseUrl = url + planet;
             RestTemplate restTemplate = new RestTemplate();
             String json = restTemplate.getForObject(baseUrl, String.class);
 
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(json);
-
             JsonNode resultsNode = jsonNode.get("results");
-            if (resultsNode != null && resultsNode.isArray() && resultsNode.size() > 0) {
-                JsonNode firstPlanetNode = resultsNode.get(0);
-                JsonNode residentsNode = firstPlanetNode.get("residents");
-                if (residentsNode != null) {
-                    int numberOfResidents = residentsNode.size();
-                    return numberOfResidents;
-                } else {
-                    System.out.println("O nó 'residents' não existe para Naboo.");
-                }
-            } else {
-               return null;
-            }
 
+            if (resultsNode.isEmpty()) {
+                throw new NotFoundResultAPI();
+            }
+            JsonNode firstPlanetNode = resultsNode.get(0);
+            JsonNode residentsNode = firstPlanetNode.get("films");
+            if (!residentsNode.isEmpty()) {
+                return residentsNode.size();
+            }
+            return null;
         } catch (JsonMappingException e) {
             throw new RuntimeException(e);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-
-        return null;
     }
 }
