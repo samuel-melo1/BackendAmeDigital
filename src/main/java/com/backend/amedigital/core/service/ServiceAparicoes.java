@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class ServiceAparicoes {
 
-    final String url = "https://swapi.dev/api/planets?search=";
+    private static final String url = "https://swapi.dev/api/planets?search=";
 
     private PlanetRepository planetRepository;
 
@@ -26,27 +26,31 @@ public class ServiceAparicoes {
 
     public Integer buscarAparicoes(String planet) {
         String baseUrl = url + planet;
-        try {
-            RestTemplate restTemplate = new RestTemplate();
-            String json = restTemplate.getForObject(baseUrl, String.class);
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(json);
-            JsonNode resultsNode = jsonNode.get("results");
+        try {
+            String json = obterJsonDaAPI(baseUrl);
+            JsonNode resultsNode = extrairResultsNode(json);
 
             if (resultsNode.isEmpty()) {
                 throw new NotFoundResultAPI();
             }
+
             JsonNode firstPlanetNode = resultsNode.get(0);
             JsonNode residentsNode = firstPlanetNode.get("films");
-            if (!residentsNode.isEmpty()) {
-                return residentsNode.size();
-            }
-            return null;
-        } catch (JsonMappingException e) {
-            throw new RuntimeException(e);
+
+            return !residentsNode.isEmpty() ? residentsNode.size() : null;
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+    private String obterJsonDaAPI(String url) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(url, String.class);
+    }
+
+    private JsonNode extrairResultsNode(String json) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(json);
+        return jsonNode.get("results");
     }
 }

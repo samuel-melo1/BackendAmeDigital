@@ -24,7 +24,6 @@ public class Planet {
     private String nome;
     private String clima;
     private String terreno;
-    @JsonIgnore
     private Integer aparicoes;
 
     public Planet(String nome, String clima, String terreno, Integer aparicoes){

@@ -48,7 +48,7 @@ public class PlanetService {
     @Transactional
     public boolean removeById(Integer id_planet) {
         Optional<Planet> planetResponse = planetRepository.findById(id_planet);
-        if (planetResponse.isEmpty()) {
+        if (planetResponse.isPresent()) {
             planetRepository.deleteById(id_planet);
             return true;
         }
